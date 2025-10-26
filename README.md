@@ -148,13 +148,6 @@ Things I might add:
 - API endpoints for integration with other systems
 - More sophisticated tampering detection (adversarial example detection)
 
-## Notes
-
-- GPU recommended for training (NVIDIA with CUDA support)
-- You'll need about 5GB disk space for datasets and models
-- 8GB RAM minimum, 16GB is better
-- Training takes 1-2 hours on GPU, longer on CPU
-
 ## License
 
 This is an educational/research project. Feel free to use and modify as needed.
