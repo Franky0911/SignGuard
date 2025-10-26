@@ -1,0 +1,117 @@
+# SignGuard Training Configuration - OPTIMIZED FOR 8GB VRAM
+# Configuration for all model training parameters
+
+detection:
+  model: "yolov8s"  # stronger than nano, fits 8GB with AutoBatch
+  epochs: 100  # allow longer training; rely on early stopping
+  imgsz: 640  # standard YOLO size for better accuracy
+  batch_size: -1  # AutoBatch to maximize 8GB VRAM utilization
+  learning_rate: 0.002  # tuned for AdamW
+  patience: 50
+  save_period: 10
+  # GPU optimization parameters
+  device: 0  # Use GPU 0
+  workers: 8  # balance CPU load on typical systems
+  amp: true  # Mixed precision training (2x speed boost)
+  cache: false  # Disable RAM caching to avoid large memory use on Windows
+  close_mosaic: 15  # Disable mosaic augmentation in last epochs for stability
+  accumulate: 1  # gradient accumulation steps (increase if VRAM tight)
+  # ULTRA SPEED optimizations
+  cos_lr: true  # Cosine learning rate scheduler
+  optimizer: "AdamW"  # AdamW works well on small objects
+  lr0: 0.002  # Initial learning rate
+  lrf: 0.01  # Final learning rate factor
+  weight_decay: 0.0005
+  label_smoothing: 0.0
+  # MAXIMUM SPEED settings
+  single_cls: false
+  rect: true  # rectangular batches speed up and slightly improve mAP on signs
+  resume: true  # Enable resume for interrupted training
+  # Additional speed boosts
+  overlap_mask: false  # Disable for speed
+  mask_ratio: 4  # Optimize mask processing
+  dropout: 0.0  # Disable dropout for speed
+  val: true  # Keep validation
+  plots: false  # Disable plotting during training for speed
+  save_json: false  # Disable JSON saving for speed
+  save_hybrid: false  # Disable hybrid saving for speed
+  # ULTRA AGGRESSIVE SPEED OPTIMIZATIONS
+  verbose: false
+  seed: 0
+  deterministic: false
+  benchmark: false  # Disable to enable AutoBatch optimal batch search
+  compile: false  # Disable compilation to avoid cuDNN issues
+  # Memory optimizations
+  profile: false  # Disable profiling for speed
+  freeze: []  # No frozen layers for maximum speed
+  # Data loading optimizations - BALANCED SPEED + PERFORMANCE
+  augment: true
+  mosaic: 0.8  # stronger mosaic improves small object recall
+  mixup: 0.1  # slightly stronger mixup for regularization
+  copy_paste: 0.1  # boosts small object diversity
+  degrees: 5.0  # Light rotation for robustness
+  translate: 0.2  # Moderate translation
+  scale: 0.7  # a bit more aggressive zoom for robustness
+  shear: 2.0  # Light shear for robustness
+  perspective: 0.0001  # Very light perspective
+  flipud: 0.0  # Disable vertical flip (not useful for traffic signs)
+  fliplr: 0.5  # Keep horizontal flip (essential for traffic signs)
+  bgr: 0.0  # Disable BGR conversion for speed
+  hsv_h: 0.015  # Light HSV hue variation
+  hsv_s: 0.7  # Moderate HSV saturation
+  hsv_v: 0.4  # Moderate HSV value
+  # Additional performance augmentations
+  erasing: 0.2  # lighter erasing
+  auto_augment: null  # disable auto augment to save time
+  # Speed-optimized but performance-focused
+  crop_fraction: 1.0  # Full crop for maximum data usage
+
+tampered_detection:
+  model: "resnet18"
+  epochs: 20
+  batch_size: 32  # Good balance for 8GB VRAM
+  learning_rate: 0.001
+  patience: 7
+  num_classes: 2  # Clean vs Tampered
+  weight_decay: 0.0001
+  grad_clip_norm: 1.0
+  label_smoothing: 0.1
+  use_amp: true
+  early_stopping_patience: 7
+  scheduler: "cosine"
+  scheduler_params:
+    T_max: 10
+    eta_min: 0.000001
+
+# Classification section removed - YOLO handles both detection and classification
+# The YOLO model trained with 'detection' settings above already includes
+# classification capabilities for all 43 traffic sign classes
+
+data:
+  train_split: 0.8
+  val_split: 0.2
+  num_workers: 6  # Optimized for faster data loading on 4060
+  pin_memory: true
+  persistent_workers: true  # Keep workers alive between epochs
+  prefetch_factor: 3  # Balanced prefetching for speed
+  
+synthetic:
+  num_tampered_images: 2000
+  modifications_per_image: 3
+  noise_level: 15
+  color_shift_range: 10
+  # Tampered sign types to generate
+  tampered_types:
+    - "sticker_overlay"      # Stickers on signs
+    - "graffiti"             # Graffiti/spray paint
+    - "adversarial_patch"    # Adversarial patches
+    - "printout_replacement" # Printed sign replacement
+    - "weather_damage"       # Weather-induced damage
+    - "vandalism"            # General vandalism
+
+paths:
+  models_dir: "models"
+  data_dir: "dataset"
+  augmented_dir: "dataset/augmented"
+  tampered_signs_dir: "dataset/tampered_signs"
+  logs_dir: "logs"

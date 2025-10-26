@@ -1,0 +1,47 @@
+# Detection Configuration
+# Optimized settings for better detection on unseen data
+
+detection:
+  # Primary confidence threshold for YOLO detection
+  # Lowered to detect more objects on unseen data
+  confidence_threshold: 0.15
+  
+  # Minimum bounding box size (width x height in pixels)
+  # Reduced to catch smaller signs that might be missed
+  min_box_size: 5
+  
+  # Debug mode - set to true to see detailed detection information
+  debug_mode: true
+  
+  # Fallback confidence threshold when no detections found
+  fallback_threshold: 0.05
+  
+  # Additional fallback thresholds for progressive detection
+  progressive_thresholds: [0.1, 0.05, 0.01, 0.005]
+  
+  # Enable multi-scale detection for better coverage
+  multi_scale_detection: true
+  
+  # Image preprocessing settings
+  input_size: 640
+  normalize: true
+  
+  # NMS (Non-Maximum Suppression) settings
+  iou_threshold: 0.45
+  max_detections: 100
+
+# Classification Configuration
+# Note: Classification is now handled by YOLO detection model
+# YOLO outputs both bounding boxes and class IDs (0-42) for all 43 traffic sign types
+# No separate classification model needed!
+
+# Performance Settings
+performance:
+  # Enable GPU acceleration if available
+  use_gpu: true
+  
+  # Number of workers for data loading
+  num_workers: 4
+  
+  # Batch size for processing
+  batch_size: 1
