@@ -123,9 +123,9 @@ Check `requirements.txt` for the full list.
 
 ## Training Details
 
-The YOLO model trains pretty quickly - maybe 30-40 minutes on a decent GPU. The tamper detector takes a bit longer because I added a bunch of regularization (dropout, weight decay, label smoothing) to prevent overfitting on the synthetic tampered signs.
+The YOLO model underwent extensive training, taking approximately 14 hours utilizing the highest available GPU compute tier on Google Colab Pro. The ResNet18 tamper detector also involves intensive training, incorporating significant regularization techniques (dropout, weight decay, label smoothing) to effectively prevent overfitting on the synthetically generated tampered datasets.
 
-I used mixed precision training to speed things up and gradient clipping to keep things stable. Early stopping is enabled so it won't waste time if the model stops improving.
+To optimize the training pipeline, I implemented mixed precision training to accelerate processing times, alongside gradient clipping to maintain stability during the runs. Early stopping is also configured to halt training efficiently once the model ceases to improve, ensuring no compute resources are wasted.
 
 ## Results
 
