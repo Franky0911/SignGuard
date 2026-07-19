@@ -114,13 +114,13 @@ def load_tampered_detector():
             try:
                 model.load_state_dict(state)
                 model.to(device).eval()
-                print(f"✅ Loaded tampered detector from: {ckpt}")
+                print(f"Loaded tampered detector from: {ckpt}")
                 return model
             except Exception as e:
-                print(f"⚠️  Failed to load {ckpt}: {e}")
+                print(f"Failed to load {ckpt}: {e}")
                 pass
     
-    print("⚠️  No tampered detector model found")
+    print("No tampered detector model found")
     return None
 
 
