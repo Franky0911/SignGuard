@@ -86,9 +86,9 @@ class TrafficSignDetector:
         try:
             from ultralytics import YOLO  # Import YOLO from Ultralytics library
             self.model = YOLO(f'{self.model_name}.pt')  # Load the model weights
-            print(f"✅ Loaded pretrained {self.model_name} model")
+            print(f"Loaded pretrained {self.model_name} model")
         except Exception as e:
-            print(f"❌ Error loading model: {e}")
+            print(f"Error loading model: {e}")
             raise
     
     def train(self, data_yaml, epochs=10, imgsz=640, batch=16, **kwargs):
@@ -126,7 +126,7 @@ class TrafficSignDetector:
             return results
         except TypeError as e:
             # Retry with a minimal set if some keys still cause issues
-            print(f"⚠️ YOLO.train received unsupported args, retrying with minimal set. Error: {e}")
+            print(f"YOLO.train received unsupported args, retrying with minimal set. Error: {e}")
             minimal_kwargs = {k: train_kwargs[k] for k in ['device', 'workers', 'amp', 'cache'] if k in train_kwargs}
             results = self.model.train(
                 data=data_yaml,
@@ -144,14 +144,14 @@ class TrafficSignDetector:
         """Save trained model"""
         if self.model:
             self.model.save(path)
-            print(f"✅ Model saved to {path}")
+            print(f"Model saved to {path}")
     
     def load_model(self, path):
         """Load saved model"""
         if os.path.exists(path):
             from ultralytics import YOLO
             self.model = YOLO(path)
-            print(f"✅ Model loaded from {path}")
+            print(f"Model loaded from {path}")
             return True
         return False
 
@@ -173,9 +173,9 @@ class TamperedSignDetector(nn.Module):
             self.backbone = timm.create_model(self.model_name, pretrained=True, num_classes=0)
             feature_dim = self.backbone.num_features
             self.classifier = nn.Linear(feature_dim, 2)  # Binary classification
-            print(f"✅ Created {self.model_name} model")
+            print(f"Created {self.model_name} model")
         except Exception as e:
-            print(f"❌ Error creating model: {e}")
+            print(f"Error creating model: {e}")
             raise
     
     def forward(self, x):
@@ -207,10 +207,10 @@ class TrafficSignClassifier:
                 drop_rate=dropout_rate,  # Dropout for regularization
                 drop_path_rate=drop_path_rate  # Stochastic depth for better generalization
             )
-            print(f"✅ Created {self.model_name} classifier with {classes} classes")
-            print(f"   Regularization: dropout={dropout_rate}, drop_path={drop_path_rate}")
+            print(f"Created {self.model_name} classifier with {classes} classes")
+            print(f"Regularization: dropout={dropout_rate}, drop_path={drop_path_rate}")
         except Exception as e:
-            print(f"❌ Error creating classifier: {e}")
+            print(f"Error creating classifier: {e}")
             raise
 
 
